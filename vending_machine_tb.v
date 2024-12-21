@@ -1,13 +1,13 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: NONE
+// Engineer: S Ujwal Niranjan
 // 
 // Create Date: 20.12.2024 21:42:42
-// Design Name: 
+// Design Name: Vending Machine
 // Module Name: vending_machine_tb
-// Project Name: 
-// Target Devices: 
+// Project Name: VENDING MACHINE
+// Target Devices: Basys 3 board (XC7A35T-1CPG236C)
 // Tool Versions: 
 // Description: 
 // 
