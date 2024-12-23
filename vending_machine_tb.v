@@ -18,34 +18,79 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
-
 module vending_machine_tb;
-//inputs
-reg clk;
-reg [1:0] in;
-reg rst;
-//output
-reg out;
-reg [1:0] change;
 
-vending_machine uut(
-    .clk(clk),
-    .in(in),
-    .rst(rst),
-    .out(out),
-    .change(change)    
-);
+    // Inputs
+    reg clk;
+    reg rst;
+    reg [1:0] in;
 
-initial 
-begin
-    rst = 1;
-    clk = 0;
-    #6 rst = 0;
-    in = 1;
-    #11 in = 1;
-    #16 in = 1;
-    #21 finish;
-end
- always #5 clk = ~clk;
+    // Outputs
+    wire out;
+    wire [1:0] change;
+
+    // Instantiate the vending machine module
+    vending_machine uut (
+        .clk(clk),
+        .rst(rst),
+        .in(in),
+        .out(out),
+        .change(change)
+    );
+
+    // Clock generation
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk; // 10ns clock period
+    end
+
+    // Test stimulus
+    initial begin
+        // Initialize inputs
+        rst = 1;
+        in = 2'b00;
+        
+        // Wait for reset
+        #10 rst = 0;
+
+        // Test case 1: No input (stay in s0)
+        #10 in = 2'b00;
+        #10;
+
+        // Test case 2: Insert 1 unit (s0 -> s1)
+        #10 in = 2'b01;
+        #10;
+
+        // Test case 3: Insert 1 more unit (s1 -> s2)
+        #10 in = 2'b01;
+        #10;
+
+        // Test case 4: Insert 2 units (s2 -> s0 with product dispensed)
+        #10 in = 2'b10;
+        #10;
+
+        // Test case 5: Reset during operation
+        rst = 1;
+        #10 rst = 0;
+        in = 2'b01;
+        #10;
+
+        // Test case 6: Insert 2 units directly (s0 -> s2)
+        in = 2'b10;
+        #10;
+
+        // Test case 7: Idle (stay in s2, check change output)
+        in = 2'b00;
+        #10;
+
+        // End simulation
+        $finish;
+    end
+
+    // Monitor signals
+    initial begin
+        $monitor("Time: %0t | Reset: %b | Input: %b | Current State: %b | Output: %b | Change: %b",
+                 $time, rst, in, uut.c_state, out, change);
+    end
+
 endmodule
