@@ -87,10 +87,7 @@ module vending_machine_tb;
         $finish;
     end
 
-    // Monitor signals
-    initial begin
-        $monitor("Time: %0t | Reset: %b | Input: %b | Current State: %b | Output: %b | Change: %b",
-                 $time, rst, in, uut.c_state, out, change);
+
     end
 
 endmodule
